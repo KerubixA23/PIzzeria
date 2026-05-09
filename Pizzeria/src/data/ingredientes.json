@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "nombre": "Queso",
+    "precio": 2.00,
+    "categoria": "base"
+  },
+  {
+    "id": 2,
+    "nombre": "Pepperoni",
+    "precio": 3.50,
+    "categoria": "carnes"
+  },
+  {
+    "id": 3,
+    "nombre": "Jamón",
+    "precio": 3.00,
+    "categoria": "carnes"
+  },
+  {
+    "id": 4,
+    "nombre": "Champiñones",
+    "precio": 1.50,
+    "categoria": "verduras"
+  },
+  {
+    "id": 5,
+    "nombre": "Cebolla",
+    "precio": 1.00,
+    "categoria": "verduras"
+  },
+  {
+    "id": 6,
+    "nombre": "Tomate",
+    "precio": 1.00,
+    "categoria": "verduras"
+  },
+  {
+    "id": 7,
+    "nombre": "Piña",
+    "precio": 2.00,
+    "categoria": "frutas"
+  },
+  {
+    "id": 8,
+    "nombre": "Aceitunas",
+    "precio": 2.50,
+    "categoria": "verduras"
+  }
+]
