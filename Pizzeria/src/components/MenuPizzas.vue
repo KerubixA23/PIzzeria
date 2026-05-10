@@ -1,105 +1,70 @@
 <template>
-  <div class="menu-container">
-    <div class="pizza-card" v-for="pizza in pizzas" :key="pizza.id">
-      
-      <img :src="pizza.imagen" :alt="pizza.nombre" class="pizza-img" />
+  <div class="contenedor">
 
-      <div class="pizza-info">
-        <h2>{{ pizza.nombre }}</h2>
+    <div
+      class="pizza-card"
+      v-for="pizza in pizzas"
+      :key="pizza.id"
+    >
+      <img
+        :src="pizza.imagen"
+        :alt="pizza.nombre"
+        class="pizza-img"
+      />
 
-        <p class="descripcion">
-          {{ pizza.descripcion }}
-        </p>
+      <h3>{{ pizza.nombre }}</h3>
 
-        <p class="ingredientes">
-          <strong>Ingredientes:</strong>
-          {{ pizza.ingredientes }}
-        </p>
+      <p class="descripcion">
+        {{ pizza.descripcion }}
+      </p>
 
-        <div class="footer-card">
-          <span class="precio">Q{{ pizza.precio }}</span>
+      <p class="ingredientes">
+        <strong>Ingredientes:</strong>
+        {{ pizza.ingredientes }}
+      </p>
 
-          <button @click="ordenarPizza(pizza)">
-            Ordenar
-          </button>
-        </div>
-      </div>
+      <p class="precio">
+        Q{{ pizza.precio }}
+      </p>
 
+      <button @click="ordenarPizza(pizza.nombre)">
+        Ordenar
+      </button>
     </div>
+
   </div>
 </template>
 
-<script>
-export default {
-  name: "MenuPizzas",
+<script setup>
+import { pizzas } from '../data/pizzas.js'
 
-  data() {
-    return {
-      pizzas: [
-        {
-          id: 1,
-          nombre: "Pizza Pepperoni",
-          descripcion: "Pizza clásica con queso mozzarella y pepperoni.",
-          ingredientes: "Queso, salsa de tomate, pepperoni",
-          precio: 85,
-          imagen: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3"
-        },
-        {
-          id: 2,
-          nombre: "Pizza Hawaiana",
-          descripcion: "Combinación de jamón y piña con queso extra.",
-          ingredientes: "Jamón, piña, queso mozzarella",
-          precio: 90,
-          imagen: "https://images.unsplash.com/photo-1513104890138-7c749659a591"
-        },
-        {
-          id: 3,
-          nombre: "Pizza Suprema",
-          descripcion: "Pizza con variedad de carnes y vegetales.",
-          ingredientes: "Pepperoni, jamón, chile, cebolla, aceitunas",
-          precio: 110,
-          imagen: "https://images.unsplash.com/photo-1548365328-9f547fb0953b"
-        }
-      ]
-    };
-  },
-
-  methods: {
-    ordenarPizza(pizza) {
-      alert(`Has ordenado: ${pizza.nombre}`);
-    }
-  }
-};
+const ordenarPizza = (nombre) => {
+  alert(`Has ordenado: ${nombre} 🍕`)
+}
 </script>
 
 <style scoped>
-.menu-container {
+.contenedor {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
   padding: 20px;
 }
 
 .pizza-card {
-  background: white;
+  border: 1px solid #ccc;
   border-radius: 12px;
-  overflow: hidden;
+  padding: 15px;
+  text-align: center;
   box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-}
-
-.pizza-card:hover {
-  transform: scale(1.03);
+  background: white;
 }
 
 .pizza-img {
   width: 100%;
   height: 200px;
   object-fit: cover;
-}
-
-.pizza-info {
-  padding: 15px;
+  border-radius: 10px;
 }
 
 .descripcion {
@@ -112,17 +77,11 @@ export default {
   color: #444;
 }
 
-.footer-card {
-  margin-top: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .precio {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   color: #e63946;
+  margin: 10px 0;
 }
 
 button {
@@ -132,7 +91,6 @@ button {
   padding: 10px 15px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
 button:hover {
