@@ -1,0 +1,156 @@
+{
+  "ingredientes": [
+    {
+      "id": 1,
+      "nombre": "Masa Delgada",
+      "categoria": "base",
+      "precio": 2.50,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Masa+Delgada"
+    },
+    {
+      "id": 2,
+      "nombre": "Masa Gruesa",
+      "categoria": "base",
+      "precio": 3.50,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Masa+Gruesa"
+    },
+    {
+      "id": 3,
+      "nombre": "Masa Integral",
+      "categoria": "base",
+      "precio": 4.00,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Masa+Integral"
+    },
+    {
+      "id": 4,
+      "nombre": "Mozzarella",
+      "categoria": "quesos",
+      "precio": 1.50,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Mozzarella"
+    },
+    {
+      "id": 5,
+      "nombre": "Queso Parmesano",
+      "categoria": "quesos",
+      "precio": 2.00,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Parmesano"
+    },
+    {
+      "id": 6,
+      "nombre": "Queso Azul",
+      "categoria": "quesos",
+      "precio": 2.50,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Queso+Azul"
+    },
+    {
+      "id": 7,
+      "nombre": "Pepperoni",
+      "categoria": "carnes",
+      "precio": 1.80,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Pepperoni"
+    },
+    {
+      "id": 8,
+      "nombre": "Jamón",
+      "categoria": "carnes",
+      "precio": 1.60,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Jamón"
+    },
+    {
+      "id": 9,
+      "nombre": "Chorizo",
+      "categoria": "carnes",
+      "precio": 2.00,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Chorizo"
+    },
+    {
+      "id": 10,
+      "nombre": "Pollo",
+      "categoria": "carnes",
+      "precio": 1.70,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Pollo"
+    },
+    {
+      "id": 11,
+      "nombre": "Tomate",
+      "categoria": "vegetales",
+      "precio": 0.50,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Tomate"
+    },
+    {
+      "id": 12,
+      "nombre": "Cebolla",
+      "categoria": "vegetales",
+      "precio": 0.40,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Cebolla"
+    },
+    {
+      "id": 13,
+      "nombre": "Pimiento",
+      "categoria": "vegetales",
+      "precio": 0.60,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Pimiento"
+    },
+    {
+      "id": 14,
+      "nombre": "Champiñones",
+      "categoria": "vegetales",
+      "precio": 0.70,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Champiñones"
+    },
+    {
+      "id": 15,
+      "nombre": "Aceitunas",
+      "categoria": "vegetales",
+      "precio": 0.80,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Aceitunas"
+    },
+    {
+      "id": 16,
+      "nombre": "Salsa Picante",
+      "categoria": "extras",
+      "precio": 0.30,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Salsa+Picante"
+    },
+    {
+      "id": 17,
+      "nombre": "Ajo",
+      "categoria": "extras",
+      "precio": 0.25,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Ajo"
+    },
+    {
+      "id": 18,
+      "nombre": "Orégano",
+      "categoria": "extras",
+      "precio": 0.20,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Orégano"
+    },
+    {
+      "id": 19,
+      "nombre": "Huevo",
+      "categoria": "extras",
+      "precio": 0.40,
+      "disponible": true,
+      "imagen": "https://via.placeholder.com/150?text=Huevo"
+    }
+  ]
+}
