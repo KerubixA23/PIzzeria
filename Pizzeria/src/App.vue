@@ -1,4 +1,7 @@
 <template>
-<h1>hola</h1>
-
+  <Dashboard />
 </template>
+
+<script setup>
+import Dashboard from './pages/Dashboard.vue'
+</script>
