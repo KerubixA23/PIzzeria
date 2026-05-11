@@ -3,14 +3,15 @@
     <h3>{{ pizza.name }}</h3>
     <p>Precio: Q{{ pizza.price }}</p>
 
-    <button @click="agregar">Agregar al carrito</button>
+    <button @click="agregar">
+      Agregar al carrito
+    </button>
   </div>
 </template>
 
 <script setup>
 import { useCartStore } from "../stores/cart";
 
-// Recibe la pizza como prop
 const props = defineProps({
   pizza: {
     type: Object,
@@ -20,10 +21,14 @@ const props = defineProps({
 
 const cart = useCartStore();
 
-// Función para agregar al carrito
 function agregar() {
-  cart.addItem(props.pizza);
+  cart.addItem({
+    id: props.pizza.id || Date.now(),
+    name: props.pizza.name,
+    price: props.pizza.price
+  });
 }
+
 </script>
 
 <style scoped>

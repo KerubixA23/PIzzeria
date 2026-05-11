@@ -8,12 +8,15 @@ const cart = useCartStore();
 <template>
   <h1>Pizzería 🍕</h1>
 
-  <!-- Botón del carrito -->
+  <!-- BOTÓN CARRITO -->
   <button class="cart-btn" @click="cart.openCart()">
     🛒
+    <button @click="cart.addItem({ id: 1, name: 'Pizza Test', price: 50 })">
+  TEST AGREGAR
+</button>
   </button>
 
-  <!-- Carrito lateral -->
+  <!-- SIDEBAR -->
   <CartSidebar />
 </template>
 
