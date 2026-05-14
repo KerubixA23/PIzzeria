@@ -100,6 +100,7 @@ function decreaseCount(item) {
 </script>
 
 <style scoped>
+/* CONTENEDOR PRINCIPAL */
 .app-container {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(320px, 1fr);
@@ -109,14 +110,16 @@ function decreaseCount(item) {
   background: #f7f7f9;
 }
 
+/* PANELES */
 .selector-panel,
 .summary-panel {
   background: #ffffff;
   border-radius: 20px;
   padding: 24px;
-  box-shadow: 0 20px 40px rgba(16, 24, 40, 0.05);
+  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
 }
 
+/* HEADERS */
 .section-header,
 .summary-header {
   margin-bottom: 24px;
@@ -125,7 +128,7 @@ function decreaseCount(item) {
 .eyebrow {
   margin: 0 0 8px;
   color: #7c7f84;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
@@ -136,26 +139,45 @@ h2 {
   color: #111827;
 }
 
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.2rem;
+}
+
 .subtitle {
-  margin: 12px 0 0;
+  margin-top: 12px;
   color: #4b5563;
   line-height: 1.6;
 }
 
+/* GRID DE INGREDIENTES */
 .ingredient-grid {
   display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
+/* CARD */
 .ingredient-card {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+
   border: 1px solid #e5e7eb;
   border-radius: 16px;
   padding: 18px;
+
+  transition: transform 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.ingredient-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
 }
 
 .ingredient-card h2 {
@@ -166,8 +188,10 @@ h2 {
 .price {
   margin: 0;
   color: #6b7280;
+  font-size: 0.95rem;
 }
 
+/* CONTROLES */
 .quantity-controls {
   display: flex;
   align-items: center;
@@ -175,14 +199,20 @@ h2 {
 }
 
 .adjust-btn {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border: 1px solid #d1d5db;
   border-radius: 10px;
   background: #ffffff;
   color: #111827;
   font-size: 1.2rem;
   cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.adjust-btn:hover {
+  background: #f3f4f6;
 }
 
 .adjust-btn:disabled {
@@ -196,11 +226,13 @@ h2 {
   font-weight: 700;
 }
 
+/* RESUMEN */
 .summary-row,
 .total-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   padding: 14px 0;
   border-bottom: 1px solid #e5e7eb;
 }
@@ -208,9 +240,11 @@ h2 {
 .total-row {
   margin-top: 20px;
   border-bottom: none;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
+  font-weight: bold;
 }
 
+/* LISTA */
 .selected-list {
   list-style: none;
   padding: 0;
@@ -221,29 +255,93 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   padding: 12px 0;
   border-bottom: 1px solid #f3f4f6;
+
+  gap: 10px;
 }
 
 .selected-list li:last-child {
   border-bottom: none;
 }
 
+/* ESTADO VACÍO */
 .empty-state {
   padding: 16px;
   border-radius: 14px;
   background: #f8fafc;
   color: #6b7280;
+  text-align: center;
 }
 
+/* =========================
+   TABLET
+========================= */
 @media (max-width: 960px) {
   .app-container {
     grid-template-columns: 1fr;
   }
 
   .summary-panel {
-    position: relative;
-    top: 0;
+    order: -1;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+}
+
+/* =========================
+   CELULAR
+========================= */
+@media (max-width: 600px) {
+  .app-container {
+    padding: 14px;
+    gap: 16px;
+  }
+
+  .selector-panel,
+  .summary-panel {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .ingredient-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ingredient-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .quantity-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .adjust-btn {
+    flex: 1;
+    height: 42px;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .selected-list li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .summary-row,
+  .total-row {
+    font-size: 0.95rem;
   }
 }
 </style>
