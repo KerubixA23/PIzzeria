@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import EmployeesView from '../views/EmployeesView.vue'
+import EmployeesPanel from '../views/EmployeesPanel.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -14,6 +15,11 @@ const router = createRouter({
       path: '/empleados',
       name: 'employees',
       component: EmployeesView,
+    },
+    {
+      path: '/empleados/panel',
+      name: 'employees-panel',
+      component: EmployeesPanel,
     },
   ],
   scrollBehavior() {

@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const codigo = ref('')
 const errorMessage = ref('')
 
 function ingresar(): void {
   if (codigo.value.trim().toUpperCase() === 'PIZZA2024') {
     errorMessage.value = ''
-    window.alert('Acceso válido. Luego aquí puedes redirigir al panel de empleados.')
+    // Redirigir al panel de empleados (componente temporal en desarrollo)
+    router.push({ name: 'employees-panel' }).catch(() => {})
     return
   }
 
