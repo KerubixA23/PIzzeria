@@ -32,6 +32,24 @@
         </div>
       </section>
 
+      <!-- Alerta de productos sin stock -->
+      <section v-if="productsWithoutStock.length > 0" class="alert alert-danger">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+          <h3>¡Productos sin stock!</h3>
+          <p>Los siguientes productos están agotados: {{ getProductListString(productsWithoutStock) }}</p>
+        </div>
+      </section>
+
+      <!-- Alerta de stock bajo -->
+      <section v-if="productsWithLowStock.length > 0" class="alert alert-warning">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+          <h3>Stock bajo</h3>
+          <p>Los siguientes productos tienen stock bajo: {{ getProductListString(productsWithLowStock) }}</p>
+        </div>
+      </section>
+
       <section class="section-block">
         <h3>Pizzas</h3>
         <div class="cards-grid">
@@ -113,7 +131,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { pizzas as mockPizzas } from '../data/mock/pizzas'
 import { ingredients as mockIngredients } from '../data/mock/ingredients'
@@ -124,8 +142,8 @@ const router = useRouter()
 const tabs = ['Pedidos', 'Domicilio', 'Registro', 'Inventario']
 const activeTab = ref('Inventario')
 
-// Por ahora los controles aparecen pero no son interactivos
-const interactive = false
+// Controles interactivos habilitados
+const interactive = true
 
 // Inicializar estado local con stock por default
 const pizzasState = reactive(
@@ -139,6 +157,21 @@ const ingredientsState = reactive(
 const drinksState = reactive(
   mockDrinks.map((d) => ({ ...d, stock: 200 }))
 )
+
+// Computed properties para alertas de stock
+const productsWithoutStock = computed(() => {
+  const allProducts = [...pizzasState, ...ingredientsState, ...drinksState]
+  return allProducts.filter(p => p.stock === 0)
+})
+
+const productsWithLowStock = computed(() => {
+  const allProducts = [...pizzasState, ...ingredientsState, ...drinksState]
+  return allProducts.filter(p => p.stock > 0 && p.stock <= 10)
+})
+
+function getProductListString(products: any[]): string {
+  return products.map(p => `${p.nombre} (${p.stock})`).join(', ')
+}
 
 function decrease(pizza: any) {
   if (!interactive) return
@@ -279,5 +312,66 @@ function logout() {
  .section-block { margin-top: 22px }
  .small-card { padding: 12px }
  .category { color: #6b7280; margin: 8px 0 }
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  border: 1px solid;
+}
+
+.alert-danger {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.alert-danger .alert-icon {
+  color: #dc2626;
+  font-size: 1.5rem;
+}
+
+.alert-danger h3,
+.alert-danger p {
+  color: #dc2626;
+  margin: 0;
+}
+
+.alert-danger h3 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.alert-warning {
+  background: #fef3c7;
+  border-color: #fde047;
+}
+
+.alert-warning .alert-icon {
+  color: #d97706;
+  font-size: 1.5rem;
+}
+
+.alert-warning h3,
+.alert-warning p {
+  color: #d97706;
+  margin: 0;
+}
+
+.alert-warning h3 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-content p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
 
 </style>
