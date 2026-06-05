@@ -31,16 +31,90 @@
           <button class="add-btn" :disabled="!interactive" @click="addProduct">+ Agregar Producto</button>
         </div>
       </section>
+    
+      <template v-if="activeTab === 'Inventario'">
+        <!-- Toast notification -->
+        <div v-if="notice.show" :class="['toast', notice.type]">
+          {{ notice.text }}
+        </div>
 
-      <section class="section-block">
+        <!-- Edit Modal -->
+        <div v-if="showEditModal" class="modal-backdrop">
+        <div class="modal">
+          <header>
+            <h3>Editar Producto</h3>
+            <button class="close" @click="closeEdit">✖</button>
+          </header>
+          <div class="body">
+            <p class="subtitle">Modifica los detalles del producto</p>
+
+            <label>Nombre
+              <input v-model="editing.nombre" placeholder="Nombre del producto" />
+            </label>
+
+            <label>Cantidad
+              <input type="number" v-model.number="editing.stock" />
+            </label>
+
+            <label>Unidad
+              <input v-model="editing.unit" placeholder="unidades" />
+            </label>
+
+            <label>Stock Mínimo
+              <input type="number" v-model.number="editing.minStock" />
+            </label>
+          </div>
+          <footer>
+            <button class="btn cancel" @click="closeEdit">Cancelar</button>
+            <button class="btn save" @click="saveEdit">Guardar</button>
+          </footer>
+        </div>
+      </div>
+
+      <!-- Confirm Delete Modal -->
+      <div v-if="showConfirmDelete" class="modal-backdrop">
+        <div class="modal">
+          <header>
+            <h3>¿Eliminar producto?</h3>
+            <button class="close" @click="showConfirmDelete = false">✖</button>
+          </header>
+          <div class="body">
+            <p>¿Desea eliminar "{{ confirmItem ? confirmItem.nombre : '' }}"?</p>
+          </div>
+          <footer>
+            <button class="btn cancel" @click="showConfirmDelete = false">Cancelar</button>
+            <button class="btn save" @click="performDelete">Eliminar</button>
+          </footer>
+        </div>
+      </div>
+
+        <!-- Alerta de productos sin stock -->
+        <section v-if="productsWithoutStock.length > 0" class="alert alert-danger">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+          <h3>¡Productos sin stock!</h3>
+          <p>Los siguientes productos están agotados: {{ getProductListString(productsWithoutStock) }}</p>
+        </div>
+      </section>
+
+      <!-- Alerta de stock bajo -->
+      <section v-if="productsWithLowStock.length > 0" class="alert alert-warning">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+          <h3>Stock bajo</h3>
+          <p>Los siguientes productos tienen stock bajo: {{ getProductListString(productsWithLowStock) }}</p>
+        </div>
+      </section>
+
+        <section class="section-block">
         <h3>Pizzas</h3>
         <div class="cards-grid">
           <article v-for="pizza in pizzasState" :key="`pizza-${pizza.id}`" class="product-card">
             <div class="card-header">
               <h3>{{ pizza.nombre }}</h3>
               <div class="card-icons">
-                <button class="icon">✏️</button>
-                <button class="icon">🗑️</button>
+                <button class="icon" @click="openEdit(pizza, 'pizzas')">✏️</button>
+                <button class="icon" @click="promptDelete(pizza, 'pizzas')">🗑️</button>
               </div>
             </div>
 
@@ -66,6 +140,10 @@
           <article v-for="ing in ingredientsState" :key="`ing-${ing.id}`" class="product-card small-card">
             <div class="card-header">
               <h4>{{ ing.nombre }}</h4>
+              <div class="card-icons">
+                <button class="icon" @click="openEdit(ing, 'ingredients')">✏️</button>
+                <button class="icon" @click="promptDelete(ing, 'ingredients')">🗑️</button>
+              </div>
             </div>
             <p class="category">{{ ing.categoria }}</p>
             <div class="stock-row">
@@ -88,8 +166,8 @@
             <div class="card-header">
               <h3>{{ d.nombre }}</h3>
               <div class="card-icons">
-                <button class="icon">✏️</button>
-                <button class="icon">🗑️</button>
+                <button class="icon" @click="openEdit(d, 'drinks')">✏️</button>
+                <button class="icon" @click="promptDelete(d, 'drinks')">🗑️</button>
               </div>
             </div>
 
@@ -107,13 +185,36 @@
             </div>
           </article>
         </div>
-      </section>
+        </section>
+
+        </template>
+
+      <template v-else-if="activeTab === 'Pedidos'">
+        <section class="section-block">
+          <h3>Pedidos</h3>
+          <div class="placeholder">Sección de Pedidos (en blanco por ahora).</div>
+        </section>
+      </template>
+
+      <template v-else-if="activeTab === 'Domicilio'">
+        <section class="section-block">
+          <h3>Domicilio</h3>
+          <div class="placeholder">Sección de Domicilios (en blanco por ahora).</div>
+        </section>
+      </template>
+
+      <template v-else-if="activeTab === 'Registro'">
+        <section class="section-block">
+          <h3>Registro</h3>
+          <div class="placeholder">Sección de Registro (en blanco por ahora).</div>
+        </section>
+      </template>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { pizzas as mockPizzas } from '../data/mock/pizzas'
 import { ingredients as mockIngredients } from '../data/mock/ingredients'
@@ -124,8 +225,8 @@ const router = useRouter()
 const tabs = ['Pedidos', 'Domicilio', 'Registro', 'Inventario']
 const activeTab = ref('Inventario')
 
-// Por ahora los controles aparecen pero no son interactivos
-const interactive = false
+// Controles interactivos habilitados
+const interactive = true
 
 // Inicializar estado local con stock por default
 const pizzasState = reactive(
@@ -139,6 +240,21 @@ const ingredientsState = reactive(
 const drinksState = reactive(
   mockDrinks.map((d) => ({ ...d, stock: 200 }))
 )
+
+// Computed properties para alertas de stock
+const productsWithoutStock = computed(() => {
+  const allProducts = [...pizzasState, ...ingredientsState, ...drinksState]
+  return allProducts.filter(p => p.stock === 0)
+})
+
+const productsWithLowStock = computed(() => {
+  const allProducts = [...pizzasState, ...ingredientsState, ...drinksState]
+  return allProducts.filter(p => p.stock > 0 && p.stock <= 10)
+})
+
+function getProductListString(products: any[]): string {
+  return products.map(p => `${p.nombre} (${p.stock})`).join(', ')
+}
 
 function decrease(pizza: any) {
   if (!interactive) return
@@ -160,6 +276,70 @@ function addProduct() {
   // placeholder: agregar una pizza vacía para desarrollo
   const id = pizzasState.length + 1
   pizzasState.push({ id, nombre: 'Nuevo Producto', descripcion: '', ingredientes: [], precio: 0, imagen: '', stock: 0 })
+}
+
+// --- Edit / Delete modal state and handlers ---
+const showEditModal = ref(false)
+const editing = ref<any | null>(null)
+const editingCollection = ref<'pizzas'|'ingredients'|'drinks' | null>(null)
+
+function openEdit(item: any, collection: 'pizzas'|'ingredients'|'drinks') {
+  editing.value = { ...item, unit: item.unit ?? 'unidades', minStock: item.minStock ?? 0 }
+  editingCollection.value = collection
+  showEditModal.value = true
+}
+
+function closeEdit() {
+  showEditModal.value = false
+  editing.value = null
+  editingCollection.value = null
+}
+
+function saveEdit() {
+  if (!editing.value || !editingCollection.value) return
+  const col = editingCollection.value
+  let arr: any[] = col === 'pizzas' ? pizzasState : col === 'ingredients' ? ingredientsState : drinksState
+  const idx = arr.findIndex(i => i.id === editing.value.id)
+  if (idx >= 0) {
+    // update in-place to keep reactivity
+    arr[idx] = { ...arr[idx], ...editing.value }
+  }
+  const name = editing.value.nombre
+  closeEdit()
+  // show success notification
+  showToast(`"${name}" guardado.`)
+}
+
+// Confirmation modal state for delete
+const showConfirmDelete = ref(false)
+const confirmItem = ref<any | null>(null)
+const confirmCollection = ref<'pizzas'|'ingredients'|'drinks' | null>(null)
+
+function promptDelete(item: any, collection: 'pizzas'|'ingredients'|'drinks') {
+  confirmItem.value = item
+  confirmCollection.value = collection
+  showConfirmDelete.value = true
+}
+
+function performDelete() {
+  if (!confirmItem.value || !confirmCollection.value) return
+  const name = confirmItem.value.nombre
+  const collection = confirmCollection.value
+  let arr: any[] = collection === 'pizzas' ? pizzasState : collection === 'ingredients' ? ingredientsState : drinksState
+  const idx = arr.findIndex(i => i.id === confirmItem.value.id)
+  if (idx >= 0) arr.splice(idx, 1)
+  showConfirmDelete.value = false
+  confirmItem.value = null
+  confirmCollection.value = null
+  showToast(`"${name}" eliminado.`, 'success')
+}
+
+// Toast / notification state
+const notice = ref({ show: false, text: '', type: '' })
+
+function showToast(text: string, type = 'success') {
+  notice.value = { show: true, text, type }
+  setTimeout(() => { notice.value.show = false }, 2500)
 }
 
 function logout() {
@@ -279,5 +459,113 @@ function logout() {
  .section-block { margin-top: 22px }
  .small-card { padding: 12px }
  .category { color: #6b7280; margin: 8px 0 }
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  border: 1px solid;
+}
+
+.alert-danger {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.alert-danger .alert-icon {
+  color: #dc2626;
+  font-size: 1.5rem;
+}
+
+.alert-danger h3,
+.alert-danger p {
+  color: #dc2626;
+  margin: 0;
+}
+
+.alert-danger h3 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.alert-warning {
+  background: #fef3c7;
+  border-color: #fde047;
+}
+
+.alert-warning .alert-icon {
+  color: #d97706;
+  font-size: 1.5rem;
+}
+
+.alert-warning h3,
+.alert-warning p {
+  color: #d97706;
+  margin: 0;
+}
+
+.alert-warning h3 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-content p {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* Modal styles */
+.modal-backdrop {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.35);
+  z-index: 50;
+}
+.modal {
+  width: 520px; background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+}
+.modal header { display:flex; justify-content:space-between; align-items:center }
+.modal header h3 { margin: 0 }
+.modal .close { border: none; background: transparent; font-size: 18px }
+.modal .body { display: grid; gap: 10px; margin-top: 12px }
+.modal label { display:block; font-size: 14px; color: #333 }
+.modal input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e6e6e6 }
+.modal footer { display:flex; justify-content:flex-end; gap: 10px; margin-top: 14px }
+.btn { padding: 8px 14px; border-radius: 8px; border: none; cursor: pointer }
+.btn.cancel { background: #fff; border: 1px solid #e6e6e6 }
+.btn.save { background: #e21717; color: #fff }
+
+/* Toast styles */
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: rgba(255,255,255,0.96);
+  color: #0f172a;
+  padding: 8px 12px;
+  border-radius: 999px;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+  z-index: 60;
+  border: 1px solid rgba(15,23,42,0.04);
+  font-weight: 600;
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+.toast.success {
+  background: rgba(16,185,129,0.12);
+  color: #065f46;
+  border-color: rgba(16,185,129,0.18);
+}
+.toast.error {
+  background: rgba(239,68,68,0.08);
+  color: #7f1d1d;
+  border-color: rgba(239,68,68,0.12);
+}
 
 </style>
