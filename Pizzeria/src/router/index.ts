@@ -15,11 +15,13 @@ const router = createRouter({
       path: '/empleados',
       name: 'employees',
       component: EmployeesView,
+      meta: { hideCart: true } // <-- Oculta el carrito en la vista de login de empleados
     },
     {
       path: '/empleados/panel',
       name: 'employees-panel',
       component: EmployeesPanel,
+      meta: { hideCart: true } // <-- Oculta el carrito dentro del panel administrativo
     },
   ],
   scrollBehavior() {

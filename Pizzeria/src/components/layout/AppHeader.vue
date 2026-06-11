@@ -35,7 +35,11 @@ const isEmployees = computed(() => route.name === 'employees')
           Empleados
         </RouterLink>
 
-        <button class="nav-btn cart-btn" @click="cart.openCart()">
+        <button 
+          v-if="!route.meta.hideCart" 
+          class="nav-btn cart-btn" 
+          @click="cart.openCart()"
+        >
           Carrito
           <span class="badge">{{ cart.cantidadItems }}</span>
         </button>
