@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import MenuTabs from '../components/menu/MenuTabs.vue'
 import PizzaList from '../components/menu/PizzaList.vue'
 import PizzaCustomizer from '../components/customizer/PizzaCustomizer.vue'
+import BebidasList from '../components/menu/BebidasList.vue'
 
 type HomeTab = 'menu' | 'personalizar' | 'bebidas'
 
@@ -27,12 +28,8 @@ const activeTab = ref<HomeTab>('menu')
         <PizzaCustomizer />
       </section>
 
-      <section v-else class="placeholder-card">
-        <h2>Bebidas</h2>
-        <p>
-          Esta sección queda lista como base visual. Después se conecta con su
-          lógica y sus endpoints.
-        </p>
+      <section v-else class="section-content">
+        <BebidasList />
       </section>
     </div>
   </main>
