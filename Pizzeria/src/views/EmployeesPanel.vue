@@ -13,14 +13,14 @@
       </header>
 
       <nav class="panel-tabs">
-        <button
-          v-for="t in tabs"
-          :key="t"
-          :class="['tab', { active: activeTab === t }]"
-          @click="activeTab = t"
-        >
-          {{ t }}
-        </button>
+  <button
+    v-for="t in tabs"
+    :key="t"
+    :class="['tab', { active: activeTab === t }]"
+    @click="activeTab = t"
+       >
+      {{ t }}
+      </button>
       </nav>
 
       <section class="panel-controls">
@@ -104,7 +104,26 @@
           <h3>Stock bajo</h3>
           <p>Los siguientes productos tienen stock bajo: {{ getProductListString(productsWithLowStock) }}</p>
         </div>
-      </section>
+      </section> 
+
+      <div class="stats-grid">
+  <div class="stat-card yellow">
+    <p>Total Productos</p>
+    <h2>
+      {{ pizzasState.length + ingredientsState.length + drinksState.length }}
+    </h2>
+  </div>
+
+  <div class="stat-card blue">
+    <p>Stock Bajo</p>
+    <h2>{{ productsWithLowStock.length }}</h2>
+  </div>
+
+  <div class="stat-card green">
+    <p>Sin Stock</p>
+    <h2>{{ productsWithoutStock.length }}</h2>
+  </div>
+</div>
 
         <section class="section-block">
         <h3>Pizzas</h3>
@@ -192,23 +211,48 @@
       <template v-else-if="activeTab === 'Pedidos'">
         <section class="section-block">
           <h3>Pedidos</h3>
-          <div class="placeholder">Sección de Pedidos (en blanco por ahora).</div>
+          <div class="empty-state">
+         No hay pedidos para mostrar
+         </div>
         </section>
       </template>
 
       <template v-else-if="activeTab === 'Domicilio'">
         <section class="section-block">
           <h3>Domicilio</h3>
-          <div class="placeholder">Sección de Domicilios (en blanco por ahora).</div>
+          <div class="empty-state">
+         No hay pedidos a domicilio para mostrar
+         </div>
         </section>
       </template>
 
-      <template v-else-if="activeTab === 'Registro'">
-        <section class="section-block">
-          <h3>Registro</h3>
-          <div class="placeholder">Sección de Registro (en blanco por ahora).</div>
-        </section>
-      </template>
+     <template v-else-if="activeTab === 'Registro'">
+
+  <div class="stats-grid">
+
+    <div class="stat-card yellow">
+      <p>Total Pedidos</p>
+      <h2>{{ totalPedidos }}</h2>
+    </div>
+
+    <div class="stat-card green">
+      <p>Total Ventas</p>
+      <h2>Q{{ totalVentas }}</h2>
+    </div>
+
+    <div class="stat-card blue">
+      <p>Efectivo</p>
+      <h2>Q{{ totalEfectivo }}</h2>
+    </div>
+
+    <div class="stat-card purple">
+      <p>Transferencias</p>
+      <h2>Q{{ totalTransferencias }}</h2>
+    </div>
+
+  </div>
+
+</template>
     </div>
   </main>
 </template>
@@ -224,6 +268,14 @@ const router = useRouter()
 
 const tabs = ['Pedidos', 'Domicilio', 'Registro', 'Inventario']
 const activeTab = ref('Inventario')
+
+const pedidosLocal = ref([])
+const pedidosDomicilio = ref([])
+
+const totalPedidos = ref(0)
+const totalVentas = ref(0)
+const totalEfectivo = ref(0)
+const totalTransferencias = ref(0)
 
 // Controles interactivos habilitados
 const interactive = true
@@ -251,6 +303,7 @@ const productsWithLowStock = computed(() => {
   const allProducts = [...pizzasState, ...ingredientsState, ...drinksState]
   return allProducts.filter(p => p.stock > 0 && p.stock <= 10)
 })
+
 
 function getProductListString(products: any[]): string {
   return products.map(p => `${p.nombre} (${p.stock})`).join(', ')
@@ -351,6 +404,7 @@ function logout() {
 .employees-panel {
   min-height: calc(100vh - 82px);
   padding: 24px 0 80px;
+  background: #f7efe9;
 }
 
 .container {
@@ -366,13 +420,15 @@ function logout() {
 }
 
 .panel-header h1 {
-  margin: 0 0 6px;
-  font-size: 2rem;
+  margin: 0;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #0f172a;
 }
 
 .subtitle {
-  margin: 0;
-  color: #6b7280;
+  font-size: 1.2rem;
+  color: #64748b;
 }
 
 .header-actions .logout-btn {
@@ -385,24 +441,28 @@ function logout() {
 
 .panel-tabs {
   display: flex;
-  gap: 12px;
-  margin: 18px 0;
+  justify-content: center;
+  background: #e5e7eb;
+  border-radius: 18px;
+  width: fit-content;
+  margin: 30px auto;
+  padding: 4px;
+  gap: 0;
 }
 
 .tab {
-  padding: 10px 18px;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  background: #f3f4f6;
-  cursor: pointer;
+  min-width: 180px;
+  padding: 12px 22px;
+  border: none;
+  background: transparent;
+  border-radius: 16px;
+  font-weight: 600;
 }
 
 .tab.active {
-  background: #fff;
-  border-color: #e5e7eb;
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  background: white;
+  box-shadow: none;
 }
-
 .panel-controls {
   display: flex;
   align-items: center;
@@ -435,10 +495,11 @@ function logout() {
 }
 
 .product-card {
-  background: #fff;
-  border: 1px solid #f0e6e3;
-  border-radius: 12px;
-  padding: 18px;
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  border: 1px solid #ececec;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
 }
 
 .card-header { display:flex; justify-content:space-between; align-items:center }
@@ -566,6 +627,78 @@ function logout() {
   background: rgba(239,68,68,0.08);
   color: #7f1d1d;
   border-color: rgba(239,68,68,0.12);
+} 
+
+@media (max-width: 900px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-tabs {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    min-width: 140px;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+.empty-state {
+  min-height: 220px;
+  background: #f4f4f4;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  font-size: 1.2rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 30px;
+}
+
+.stat-card {
+  border-radius: 20px;
+  padding: 28px;
+  min-height: 180px;
+  border: 1px solid;
+}
+
+.stat-card h2 {
+  font-size: 3rem;
+  margin: 20px 0;
+}
+
+.yellow {
+  background: #faf8e8;
+  border-color: #f3d547;
+}
+
+.blue {
+  background: #eef5ff;
+  border-color: #93c5fd;
+}
+
+.green {
+  background: #eefbf2;
+  border-color: #86efac;
+}
+
+.purple {
+  background: #f8f0ff;
+  border-color: #d8b4fe;
 }
 
 </style>
